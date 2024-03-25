@@ -1,5 +1,5 @@
 // Converts an RGB color to Hex.
-export function rgbToHex(r: number, g: number, b: number): string {
+export function rgbToHex({ r, g, b }: { r: number, g: number, b: number }): string {
     return "#" + [r, g, b].map(x => {
         const hex = x.toString(16);
         return hex.length === 1 ? "0" + hex : hex;
@@ -17,14 +17,14 @@ export function hexToRgb(hex: string): { r: number, g: number, b: number } | nul
 }
 
 // Converts an RGB color to HSL.
-export function rgbToHsl(r: number, g: number, b: number): { h: number, s: number, l: number } {
+export function rgbToHsl({ r, g, b }: { r: number, g: number, b: number }): { h: number, s: number, l: number } {
     r /= 255, g /= 255, b /= 255;
     const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h = 0, // Initialize h to 0 for achromatic colors
-        s,
-        l = (max + min) / 2;
+    let h, s, l = (max + min) / 2;
 
-    if (max !== min) {
+    if (max === min) {
+        h = s = 0; // achromatic
+    } else {
         const d = max - min;
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
         switch (max) {
@@ -33,15 +33,11 @@ export function rgbToHsl(r: number, g: number, b: number): { h: number, s: numbe
             case b: h = (r - g) / d + 4; break;
         }
         h /= 6;
-    } else {
-        s = 0; // Achromatic
     }
 
-    return { h: h * 360, s: s * 100, l: l * 100 };
+    return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
-
-
-// Helper function for HSL to RGB conversion.
+// Define the hue2rgb helper function directly within the module
 function hue2rgb(p: number, q: number, t: number): number {
     if (t < 0) t += 1;
     if (t > 1) t -= 1;
@@ -51,8 +47,8 @@ function hue2rgb(p: number, q: number, t: number): number {
     return p;
 }
 
-// Converts an HSL color to RGB.
-export function hslToRgb(h: number, s: number, l: number): { r: number, g: number, b: number } {
+// Then your hslToRgb function
+export function hslToRgb({ h, s, l }: { h: number, s: number, l: number }): { r: number, g: number, b: number } {
     let r, g, b;
 
     h /= 360;
@@ -72,29 +68,33 @@ export function hslToRgb(h: number, s: number, l: number): { r: number, g: numbe
     return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
 }
 
+
 // Converts a Hex color to HSL.
 export function hexToHsl(hex: string): { h: number, s: number, l: number } {
-    const { r, g, b } = hexToRgb(hex) ?? { r: 0, g: 0, b: 0 };
-    return rgbToHsl(r, g, b);
+    const rgb = hexToRgb(hex);
+    if (rgb) {
+        return rgbToHsl(rgb);
+    }
+    return { h: 0, s: 0, l: 0 }; // Fallback for null RGB
 }
 
 // Converts an HSL color to Hex.
-export function hslToHex(h: number, s: number, l: number): string {
-    const { r, g, b } = hslToRgb(h, s, l);
-    return rgbToHex(r, g, b);
+export function hslToHex({ h, s, l }: { h: number, s: number, l: number }): string {
+    const rgb = hslToRgb({ h, s, l });
+    return rgbToHex(rgb);
 }
 
 // Formats an RGBA color as a CSS string.
-export function rgbaToString(r: number, g: number, b: number, a: number = 1): string {
+export function rgbaToString({ r, g, b, a = 1 }: { r: number, g: number, b: number, a?: number }): string {
     return `rgba(${r}, ${g}, ${b}, ${a})`;
 }
 
 // Formats an HSLA color as a CSS string.
-export function hslaToString(h: number, s: number, l: number, a: number = 1): string {
+export function hslaToString({ h, s, l, a = 1 }: { h: number, s: number, l: number, a?: number }): string {
     return `hsla(${h}, ${s}%, ${l}%, ${a})`;
 }
 
 // Calculates the complementary color for an HSL color.
-export function complementaryHsl(h: number, s: number, l: number): { h: number, s: number, l: number } {
+export function complementaryHsl({ h, s, l }: { h: number, s: number, l: number }): { h: number, s: number, l: number } {
     return { h: (h + 180) % 360, s, l };
 }
