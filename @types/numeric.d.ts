@@ -6,4 +6,3 @@ export declare function binaryToHexadecimal(binaryString: string): string;
 export declare function hexadecimalToBinary(hexString: string): string;
 export declare function decimalToOctal(decimalNumber: number): string;
 export declare function octalToDecimal(octalString: string): number;
-export declare function adjustFloatingPointPrecision(number: number, decimalPlaces: number): number;
