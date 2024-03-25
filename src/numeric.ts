@@ -40,7 +40,3 @@ export function octalToDecimal(octalString: string): number {
     return parseInt(octalString, 8);
 }
 
-// Adjusts a floating-point number to the specified number of decimal places.
-export function adjustFloatingPointPrecision(number: number, decimalPlaces: number): number {
-    return parseFloat(number.toFixed(decimalPlaces));
-}

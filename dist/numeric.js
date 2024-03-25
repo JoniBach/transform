@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.adjustFloatingPointPrecision = exports.octalToDecimal = exports.decimalToOctal = exports.hexadecimalToBinary = exports.binaryToHexadecimal = exports.decimalToHexadecimal = exports.hexadecimalToDecimal = exports.decimalToBinary = exports.binaryToDecimal = void 0;
+exports.octalToDecimal = exports.decimalToOctal = exports.hexadecimalToBinary = exports.binaryToHexadecimal = exports.decimalToHexadecimal = exports.hexadecimalToDecimal = exports.decimalToBinary = exports.binaryToDecimal = void 0;
 // Converts a binary string to a decimal number.
 function binaryToDecimal(binaryString) {
     return parseInt(binaryString, 2);
@@ -43,8 +43,3 @@ function octalToDecimal(octalString) {
     return parseInt(octalString, 8);
 }
 exports.octalToDecimal = octalToDecimal;
-// Adjusts a floating-point number to the specified number of decimal places.
-function adjustFloatingPointPrecision(number, decimalPlaces) {
-    return parseFloat(number.toFixed(decimalPlaces));
-}
-exports.adjustFloatingPointPrecision = adjustFloatingPointPrecision;
