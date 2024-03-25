@@ -8,7 +8,7 @@
   "scripts": {
     "test:mac": "find tests -name '*.test.js' -exec node --test {} +",
     "test:windows": "powershell -Command \"Get-ChildItem -Recurse -Filter '*.test.js' | ForEach-Object { node --test $_.FullName }\"",
-    "test": "tsc && node run-tests.js"
+    "test": "glob -c \"node --loader tsx --no-warnings --test\" \"./tests/**/*.test.ts\""
   },
   "keywords": [],
   "author": "",

@@ -94,26 +94,6 @@ export function hslaToString(h: number, s: number, l: number, a: number = 1): st
     return `hsla(${h}, ${s}%, ${l}%, ${a})`;
 }
 
-// Lightens an RGB color by a given percentage (0 to 100).
-export function lightenRgb(r: number, g: number, b: number, percent: number): string {
-    const t = percent / 100;
-    return rgbToHex(
-        Math.min(255, r + 255 * t),
-        Math.min(255, g + 255 * t),
-        Math.min(255, b + 255 * t)
-    );
-}
-
-// Darkens an RGB color by a given percentage (0 to 100).
-export function darkenRgb(r: number, g: number, b: number, percent: number): string {
-    const t = percent / 100;
-    return rgbToHex(
-        r * (1 - t),
-        g * (1 - t),
-        b * (1 - t)
-    );
-}
-
 // Calculates the complementary color for an HSL color.
 export function complementaryHsl(h: number, s: number, l: number): { h: number, s: number, l: number } {
     return { h: (h + 180) % 360, s, l };
