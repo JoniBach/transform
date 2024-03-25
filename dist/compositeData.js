@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.decompressToString = exports.compressString = exports.base64ToBlob = exports.htmlToDom = exports.markdownToHtml = exports.jsonToXml = exports.xmlToJson = exports.jsonToCsv = exports.csvToJson = exports.jsonToYaml = exports.yamlToJson = exports.objectToJsonString = exports.jsonStringToObject = void 0;
+exports.decompressToString = exports.compressString = exports.markdownToHtml = exports.jsonToXml = exports.xmlToJson = exports.jsonToCsv = exports.csvToJson = exports.jsonToYaml = exports.yamlToJson = exports.objectToJsonString = exports.jsonStringToObject = void 0;
 const yaml = __importStar(require("js-yaml"));
 const papaparse_1 = __importDefault(require("papaparse"));
 const xml2js = __importStar(require("xml2js"));
@@ -79,27 +79,6 @@ async function markdownToHtml(markdownText) {
     return await marked_1.default.parse(markdownText);
 }
 exports.markdownToHtml = markdownToHtml;
-// Converts an HTML string to DOM elements.
-function htmlToDom(htmlString) {
-    return document.createRange().createContextualFragment(htmlString);
-}
-exports.htmlToDom = htmlToDom;
-// Converts a Base64-encoded string to a Blob object.
-function base64ToBlob(base64, contentType = '', sliceSize = 512) {
-    const byteCharacters = atob(base64);
-    const byteArrays = [];
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-    }
-    return new Blob(byteArrays, { type: contentType });
-}
-exports.base64ToBlob = base64ToBlob;
 // Compresses a string using zlib compression.
 function compressString(str) {
     return pako.deflate(str);

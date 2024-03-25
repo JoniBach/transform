@@ -55,30 +55,6 @@ export async function markdownToHtml(markdownText: string): Promise<string> {
     return await marked.parse(markdownText);
 }
 
-// Converts an HTML string to DOM elements.
-export function htmlToDom(htmlString: string): DocumentFragment {
-    return document.createRange().createContextualFragment(htmlString);
-}
-
-// Converts a Base64-encoded string to a Blob object.
-export function base64ToBlob(base64: string, contentType: string = '', sliceSize: number = 512): Blob {
-    const byteCharacters = atob(base64);
-    const byteArrays = [];
-
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-    }
-
-    return new Blob(byteArrays, { type: contentType });
-}
-
-
 // Compresses a string using zlib compression.
 export function compressString(str: string): Uint8Array {
     return pako.deflate(str);
