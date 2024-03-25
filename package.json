@@ -6,7 +6,9 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "glob -c \"node --loader tsx --no-warnings --test\" \"./tests/**/*.test.ts\""
+    "test": "glob -c \"node --loader tsx --no-warnings --test\" \"./tests/**/*.test.ts\"",
+    "build": "tsc",
+    "build:test": "node test-and-build.js"
   },
   "keywords": [],
   "author": "",
