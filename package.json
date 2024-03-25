@@ -1,5 +1,5 @@
 {
-  "name": "from-to",
+  "name": "@jonibach/convert",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -8,7 +8,8 @@
   "scripts": {
     "test": "glob -c \"node --loader tsx --no-warnings --test\" \"./tests/**/*.test.ts\"",
     "build": "tsc",
-    "build:test": "node test-and-build.js"
+    "build:test": "node test-and-build.js",
+    "publish": "npm publish --access public"
   },
   "keywords": [],
   "author": "",
