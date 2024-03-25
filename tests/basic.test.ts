@@ -7,7 +7,7 @@ import {
     stringToBoolean,
     numberToBoolean,
     booleanToNumber
-} from '../src/converters/basic'; // Adjust the path to where your functions are defined
+} from '../src/basic'; // Adjust the path to where your functions are defined
 
 test('numberToString converts numbers to strings', () => {
     assert.strictEqual(numberToString(123), '123');

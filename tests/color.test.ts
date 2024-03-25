@@ -10,7 +10,7 @@ import {
     rgbaToString,
     hslaToString,
     complementaryHsl
-} from '../src/converters/color'; // Adjust the path to where your color conversion functions are defined
+} from '../src/color'; // Adjust the path to where your color conversion functions are defined
 
 test('rgbToHex correctly converts RGB to Hex', () => {
     assert.strictEqual(rgbToHex(255, 255, 255), '#ffffff');
