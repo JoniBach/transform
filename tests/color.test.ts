@@ -9,8 +9,6 @@ import {
     hslToHex,
     rgbaToString,
     hslaToString,
-    lightenRgb,
-    darkenRgb,
     complementaryHsl
 } from '../src/converters/color'; // Adjust the path to where your color conversion functions are defined
 
