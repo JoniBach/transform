@@ -1,0 +1,34 @@
+{
+  "name": "from-to",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test:mac": "find tests -name '*.test.js' -exec node --test {} +",
+    "test:windows": "powershell -Command \"Get-ChildItem -Recurse -Filter '*.test.js' | ForEach-Object { node --test $_.FullName }\"",
+    "test": "tsc && node run-tests.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.11.30",
+    "@types/pako": "^2.0.3",
+    "@types/papaparse": "^5.3.14",
+    "@types/xml2js": "^0.4.14",
+    "glob": "^10.3.10",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "assert": "^2.1.0",
+    "js-yaml": "^4.1.0",
+    "marked": "^12.0.1",
+    "pako": "^2.1.0",
+    "papaparse": "^5.4.1",
+    "xml2js": "^0.6.2"
+  }
+}
