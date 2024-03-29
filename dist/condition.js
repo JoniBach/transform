@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OperationExecutionException = exports.UnsupportedOperationException = exports.operationList = exports.noneMatch = exports.anyMatch = exports.allMatch = exports.nor = exports.nand = exports.xor = exports.extensionMatches = exports.fileExists = exports.domainMatches = exports.validEmail = exports.validURL = exports.valueForKey = exports.keyDoesNotExist = exports.keyExists = exports.sameDay = exports.betweenDates = exports.after = exports.before = exports.lengthLessThan = exports.lengthGreaterThan = exports.lengthEquals = exports.regex = exports.divisibleBy = exports.odd = exports.even = exports.not = exports.or = exports.and = exports.notEmpty = exports.empty = exports.notInArray = exports.inArray = exports.matches = exports.contains = exports.endsWith = exports.startsWith = exports.checkType = exports.doesNotExist = exports.exists = exports.isStrictlyNotEqualTo = exports.isStrictlyEqualTo = exports.isLessThanOrEqualTo = exports.isGreaterThanOrEqualTo = exports.isLessThan = exports.isGreaterThan = exports.isNotEqualTo = exports.isEqualTo = void 0;
-exports.checkConditions = exports.checkCondition = void 0;
+exports.checkConditions = exports.checkCondition = exports.operationList = exports.noneMatch = exports.anyMatch = exports.allMatch = exports.nor = exports.nand = exports.xor = exports.extensionMatches = exports.fileExists = exports.domainMatches = exports.validEmail = exports.validURL = exports.valueForKey = exports.keyDoesNotExist = exports.keyExists = exports.sameDay = exports.betweenDates = exports.after = exports.before = exports.lengthLessThan = exports.lengthGreaterThan = exports.lengthEquals = exports.regex = exports.divisibleBy = exports.odd = exports.even = exports.not = exports.or = exports.and = exports.notEmpty = exports.empty = exports.notInArray = exports.inArray = exports.matches = exports.contains = exports.endsWith = exports.startsWith = exports.checkType = exports.doesNotExist = exports.exists = exports.isStrictlyNotEqualTo = exports.isStrictlyEqualTo = exports.isLessThanOrEqualTo = exports.isGreaterThanOrEqualTo = exports.isLessThan = exports.isGreaterThan = exports.isNotEqualTo = exports.isEqualTo = void 0;
 function isEqualTo(a, b) {
     return a == b;
 }
@@ -402,7 +401,6 @@ exports.operationList = [
 ];
 class UnsupportedOperationException extends Error {
 }
-exports.UnsupportedOperationException = UnsupportedOperationException;
 class OperationExecutionException extends Error {
     constructor(operationName, operands, message) {
         super(message);
@@ -411,7 +409,6 @@ class OperationExecutionException extends Error {
         this.name = 'OperationExecutionException';
     }
 }
-exports.OperationExecutionException = OperationExecutionException;
 const checkCondition = (params) => {
     const [value1, operation, value2] = params;
     const operationEntry = exports.operationList.find(entry => entry.operation === operation);
@@ -434,14 +431,13 @@ const checkCondition = (params) => {
 exports.checkCondition = checkCondition;
 const checkConditions = (conditions) => {
     for (const condition of conditions) {
-        // Default `expectedResult` to true if it's not explicitly provided
-        const [value1, operation, value2, expectedResult = true] = condition;
+        const [value1, operation, value2, expectedResult = true] = condition; // Default expected result is true
         const result = (0, exports.checkCondition)([value1, operation, value2]);
-        // Here, `expectedResult` is guaranteed to be a boolean due to the default value
+        // Check the result against the expected result
         if (result !== expectedResult) {
-            return false;
+            return false; // Condition did not meet the expected result
         }
     }
-    return true;
+    return true; // All conditions met their expected results
 };
 exports.checkConditions = checkConditions;
