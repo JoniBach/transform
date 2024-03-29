@@ -8,7 +8,7 @@
     "test": "glob -c \"node --loader tsx --no-warnings --test\" \"./tests/**/*.test.ts\"",
     "build": "tsc",
     "build:test": "node test-and-build.js",
-    "publish": "npm publish --access public"
+    "release": "npm publish --access public"
   },
   "keywords": [],
   "author": "",
