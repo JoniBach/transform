@@ -45,7 +45,11 @@ import {
     nor,
     allMatch,
     anyMatch,
-    noneMatch
+    noneMatch,
+    UnsupportedOperationException,
+    checkCondition,
+    checkConditions,
+    ConditionParams
 } from '../src/condition'; // Adjust the path as necessary
 
 import { test } from 'node:test';
@@ -253,3 +257,51 @@ test('anyMatch should return true if any element in an array satisfies a specifi
 test('noneMatch should return true if no elements in an array satisfy a specified condition', () => {
     assert.equal(noneMatch([1, 3, 5], x => x % 2 === 0), true);
 });
+
+test('checkCondition should return true for equal values using "=" operation', () => {
+    assert.strictEqual(checkCondition([5, '=', 5]), true);
+});
+
+// Test '!=' operation
+test('checkCondition should return true for non-equal values using "!=" operation', () => {
+    assert.strictEqual(checkCondition([5, '!=', 4]), true);
+});
+
+// Test 'and' operation (assuming 'and' operation takes an array of conditions)
+test('checkCondition should return true if all conditions are true for "and" operation', () => {
+    assert.strictEqual(checkCondition([[true, '=', true], 'and', [1, '!=', 2]]), true);
+});
+
+// Test 'or' operation (assuming 'or' operation logic is implemented)
+test('checkCondition should return true if at least one condition is true for "or" operation', () => {
+    assert.strictEqual(checkCondition([[true, '=', false], 'or', [1, '!=', 2]]), true);
+});
+
+// Test 'startsWith' operation
+test('checkCondition should return true if a string starts with a specific character', () => {
+    assert.strictEqual(checkCondition(['test', 'startsWith', 't']), true);
+});
+
+// Testing multiple conditions
+test('checkConditions should return true if all conditions meet their expected results', () => {
+    const conditions: ConditionParams[] = [
+        [5, '=', 5, true], // Expected to be true
+        ['hello', 'startsWith', 'h', true], // Expected to be true
+        [10, '>', 5, true] // Expected to be true
+    ];
+    assert.strictEqual(checkConditions(conditions), true);
+});
+
+// Testing failure scenario
+test('checkConditions should return false if at least one condition does not meet the expected result', () => {
+    const conditions: ConditionParams[] = [
+        [5, '=', 4, true], // Expected to be true, but is false
+        ['hello', 'startsWith', 'h', true] // Expected to be true
+    ];
+    assert.strictEqual(checkConditions(conditions), false);
+});
+
+test('checkCondition should throw UnsupportedOperationException for unsupported operations', () => {
+    assert.throws(() => checkCondition([1, 'unsupportedOperation', 2]), UnsupportedOperationException);
+});
+
