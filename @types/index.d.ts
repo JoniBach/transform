@@ -6,3 +6,4 @@ export * from './date';
 export * from './numeric';
 export * from './siUnits';
 export * from './string';
+export * from './condition';

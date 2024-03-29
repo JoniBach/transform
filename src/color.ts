@@ -32,10 +32,12 @@ export function rgbToHsl({ r, g, b }: { r: number, g: number, b: number }): { h:
             case g: h = (b - r) / d + 2; break;
             case b: h = (r - g) / d + 4; break;
         }
-        h /= 6;
+        if (h !== undefined) {
+            h /= 6;
+        }
     }
 
-    return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+    return { h: Math.round(h ? h * 360 : 0), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
 // Define the hue2rgb helper function directly within the module
 function hue2rgb(p: number, q: number, t: number): number {

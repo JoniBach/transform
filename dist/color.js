@@ -41,9 +41,11 @@ function rgbToHsl({ r, g, b }) {
                 h = (r - g) / d + 4;
                 break;
         }
-        h /= 6;
+        if (h !== undefined) {
+            h /= 6;
+        }
     }
-    return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+    return { h: Math.round(h ? h * 360 : 0), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
 exports.rgbToHsl = rgbToHsl;
 // Define the hue2rgb helper function directly within the module
