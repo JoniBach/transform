@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.noneMatch = exports.anyMatch = exports.allMatch = exports.nor = exports.nand = exports.xor = exports.extensionMatches = exports.fileExists = exports.domainMatches = exports.validEmail = exports.validURL = exports.valueForKey = exports.keyDoesNotExist = exports.keyExists = exports.sameDay = exports.betweenDates = exports.after = exports.before = exports.lengthLessThan = exports.lengthGreaterThan = exports.lengthEquals = exports.regex = exports.divisibleBy = exports.odd = exports.even = exports.not = exports.or = exports.and = exports.notEmpty = exports.empty = exports.notInArray = exports.inArray = exports.matches = exports.contains = exports.endsWith = exports.startsWith = exports.checkType = exports.doesNotExist = exports.exists = exports.isStrictlyNotEqualTo = exports.isStrictlyEqualTo = exports.isLessThanOrEqualTo = exports.isGreaterThanOrEqualTo = exports.isLessThan = exports.isGreaterThan = exports.isNotEqualTo = exports.isEqualTo = void 0;
+exports.OperationExecutionException = exports.UnsupportedOperationException = exports.operationList = exports.noneMatch = exports.anyMatch = exports.allMatch = exports.nor = exports.nand = exports.xor = exports.extensionMatches = exports.fileExists = exports.domainMatches = exports.validEmail = exports.validURL = exports.valueForKey = exports.keyDoesNotExist = exports.keyExists = exports.sameDay = exports.betweenDates = exports.after = exports.before = exports.lengthLessThan = exports.lengthGreaterThan = exports.lengthEquals = exports.regex = exports.divisibleBy = exports.odd = exports.even = exports.not = exports.or = exports.and = exports.notEmpty = exports.empty = exports.notInArray = exports.inArray = exports.matches = exports.contains = exports.endsWith = exports.startsWith = exports.checkType = exports.doesNotExist = exports.exists = exports.isStrictlyNotEqualTo = exports.isStrictlyEqualTo = exports.isLessThanOrEqualTo = exports.isGreaterThanOrEqualTo = exports.isLessThan = exports.isGreaterThan = exports.isNotEqualTo = exports.isEqualTo = void 0;
+exports.checkConditions = exports.checkCondition = void 0;
 function isEqualTo(a, b) {
     return a == b;
 }
@@ -169,7 +170,7 @@ function domainMatches(url, domain) {
 }
 exports.domainMatches = domainMatches;
 function fileExists(path) {
-    // Note: This function requires a runtime that has access to the filesystem.
+    // Note: this function requires a runtime that has access to the filesystem.
     const fs = require('fs');
     try {
         fs.accessSync(path);
@@ -209,3 +210,238 @@ function noneMatch(array, condition) {
     return !array.some(condition);
 }
 exports.noneMatch = noneMatch;
+exports.operationList = [
+    {
+        operation: '=',
+        function: isEqualTo
+    },
+    {
+        operation: '!=',
+        function: isNotEqualTo
+    },
+    {
+        operation: '>',
+        function: isGreaterThan
+    },
+    {
+        operation: '<',
+        function: isLessThan
+    },
+    {
+        operation: '>=',
+        function: isGreaterThanOrEqualTo
+    },
+    {
+        operation: '<=',
+        function: isLessThanOrEqualTo
+    },
+    {
+        operation: '===',
+        function: isStrictlyEqualTo
+    },
+    {
+        operation: '!==',
+        function: isStrictlyNotEqualTo
+    },
+    {
+        operation: 'exists',
+        function: exists
+    },
+    {
+        operation: 'doesNotExist',
+        function: doesNotExist
+    },
+    {
+        operation: 'checkType',
+        function: checkType
+    },
+    {
+        operation: 'startsWith',
+        function: startsWith
+    },
+    {
+        operation: 'endsWith',
+        function: endsWith
+    },
+    {
+        operation: 'contains',
+        function: contains
+    },
+    {
+        operation: 'matches',
+        function: matches
+    },
+    {
+        operation: 'inArray',
+        function: inArray
+    },
+    {
+        operation: 'notInArray',
+        function: notInArray
+    },
+    {
+        operation: 'empty',
+        function: empty
+    },
+    {
+        operation: 'notEmpty',
+        function: notEmpty
+    },
+    {
+        operation: 'and',
+        function: and
+    },
+    {
+        operation: 'or',
+        function: or
+    },
+    {
+        operation: 'not',
+        function: not
+    },
+    {
+        operation: 'even',
+        function: even
+    },
+    {
+        operation: 'odd',
+        function: odd
+    },
+    {
+        operation: 'divisibleBy',
+        function: divisibleBy
+    },
+    {
+        operation: 'regex',
+        function: regex
+    },
+    {
+        operation: 'lengthEquals',
+        function: lengthEquals
+    },
+    {
+        operation: 'lengthGreaterThan',
+        function: lengthGreaterThan
+    },
+    {
+        operation: 'lengthLessThan',
+        function: lengthLessThan
+    },
+    {
+        operation: 'before',
+        function: before
+    },
+    {
+        operation: 'after',
+        function: after
+    },
+    {
+        operation: 'betweenDates',
+        function: betweenDates
+    },
+    {
+        operation: 'sameDay',
+        function: sameDay
+    },
+    {
+        operation: 'keyExists',
+        function: keyExists
+    },
+    {
+        operation: 'keyDoesNotExist',
+        function: keyDoesNotExist
+    },
+    {
+        operation: 'valueForKey',
+        function: valueForKey
+    },
+    {
+        operation: 'validURL',
+        function: validURL
+    },
+    {
+        operation: 'validEmail',
+        function: validEmail
+    },
+    {
+        operation: 'domainMatches',
+        function: domainMatches
+    },
+    {
+        operation: 'fileExists',
+        function: fileExists
+    },
+    {
+        operation: 'extensionMatches',
+        function: extensionMatches
+    },
+    {
+        operation: 'xor',
+        function: xor
+    },
+    {
+        operation: 'nand',
+        function: nand
+    },
+    {
+        operation: 'nor',
+        function: nor
+    },
+    {
+        operation: 'allMatch',
+        function: allMatch
+    },
+    {
+        operation: 'anyMatch',
+        function: anyMatch
+    },
+    {
+        operation: 'noneMatch',
+        function: noneMatch
+    }
+];
+class UnsupportedOperationException extends Error {
+}
+exports.UnsupportedOperationException = UnsupportedOperationException;
+class OperationExecutionException extends Error {
+    constructor(operationName, operands, message) {
+        super(message);
+        this.operationName = operationName;
+        this.operands = operands;
+        this.name = 'OperationExecutionException';
+    }
+}
+exports.OperationExecutionException = OperationExecutionException;
+const checkCondition = (params) => {
+    const [value1, operation, value2] = params;
+    const operationEntry = exports.operationList.find(entry => entry.operation === operation);
+    if (!operationEntry) {
+        throw new UnsupportedOperationException(`Unsupported operation '${operation}'. Please check the list of supported operations.`);
+    }
+    try {
+        const arity = operationEntry.function.length;
+        return arity === 1 ? operationEntry.function(value1) : operationEntry.function(value1, value2);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            throw new OperationExecutionException(operation, [value1, value2], `Error executing '${operation}' with values (${value1}, ${value2}): ${error.message}`);
+        }
+        else {
+            throw new OperationExecutionException(operation, [value1, value2], `Error executing '${operation}' with values (${value1}, ${value2}).`);
+        }
+    }
+};
+exports.checkCondition = checkCondition;
+const checkConditions = (conditions) => {
+    for (const condition of conditions) {
+        // Default `expectedResult` to true if it's not explicitly provided
+        const [value1, operation, value2, expectedResult = true] = condition;
+        const result = (0, exports.checkCondition)([value1, operation, value2]);
+        // Here, `expectedResult` is guaranteed to be a boolean due to the default value
+        if (result !== expectedResult) {
+            return false;
+        }
+    }
+    return true;
+};
+exports.checkConditions = checkConditions;

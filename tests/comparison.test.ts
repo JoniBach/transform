@@ -207,7 +207,7 @@ test('keyDoesNotExist should return true if an object does not have a specified 
 });
 
 test('valueForKey should return true if the value for a specified key matches a condition', () => {
-    assert.equal(valueForKey({ a: 2 }, 'a', value => value % 2 === 0), true);
+    assert.equal(valueForKey({ a: 2 }, 'a', (value: unknown) => (value as number) % 2 === 0), true);
 });
 
 // Network and URL Conditions

@@ -9,12 +9,13 @@ export function arrayToObject(array: Array<[string, any]>): Record<string, any> 
 }
 
 // Converts a Map to an object.
-export function mapToObject(map: Map<string, any>): Record<string, any> {
+export function mapToObject<T>(map: Map<string, T>): Record<string, T> {
     return Object.fromEntries(map);
 }
 
+
 // Converts an object to a Map.
-export function objectToMap(obj: Record<string, any>): Map<string, any> {
+export function objectToMap<T>(obj: Record<string, T>): Map<string, T> {
     return new Map(Object.entries(obj));
 }
 

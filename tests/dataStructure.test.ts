@@ -21,14 +21,15 @@ test('objectToArray converts an object to an array of [key, value] pairs', () =>
 
 // arrayToObject
 test('arrayToObject converts an array of [key, value] pairs back to an object', () => {
-    const array = [['name', 'John'], ['age', 30]];
+    const array: [string, any][] = [['name', 'John'], ['age', 30]];
+
     const expected = { name: 'John', age: 30 };
     assert.deepStrictEqual(arrayToObject(array), expected);
 });
 
 // mapToObject
 test('mapToObject converts a Map to an object', () => {
-    const map = new Map([['name', 'John'], ['age', 30]]);
+    const map = new Map<string, any>([['name', 'John'], ['age', 30]]);
     const expected = { name: 'John', age: 30 };
     assert.deepStrictEqual(mapToObject(map), expected);
 });
@@ -36,7 +37,7 @@ test('mapToObject converts a Map to an object', () => {
 // objectToMap
 test('objectToMap converts an object to a Map', () => {
     const obj = { name: 'John', age: 30 };
-    const expected = new Map([['name', 'John'], ['age', 30]]);
+    const expected = new Map<string, any>([['name', 'John'], ['age', 30]]);
     assert.deepStrictEqual(objectToMap(obj), expected);
 });
 
