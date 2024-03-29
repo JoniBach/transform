@@ -1,7 +1,7 @@
 export declare function objectToArray(obj: Record<string, any>): Array<[string, any]>;
 export declare function arrayToObject(array: Array<[string, any]>): Record<string, any>;
-export declare function mapToObject(map: Map<string, any>): Record<string, any>;
-export declare function objectToMap(obj: Record<string, any>): Map<string, any>;
+export declare function mapToObject<T>(map: Map<string, T>): Record<string, T>;
+export declare function objectToMap<T>(obj: Record<string, T>): Map<string, T>;
 export declare function setToArray(set: Set<any>): any[];
 export declare function arrayToSet(array: any[]): Set<any>;
 export declare function arrayToFlatArray(array: any[]): any[];

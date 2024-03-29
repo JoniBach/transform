@@ -47,3 +47,19 @@ export declare function nor(condition1: boolean, condition2: boolean): boolean;
 export declare function allMatch<T>(array: T[], condition: (value: T) => boolean): boolean;
 export declare function anyMatch<T>(array: T[], condition: (value: T) => boolean): boolean;
 export declare function noneMatch<T>(array: T[], condition: (value: T) => boolean): boolean;
+export type OperationFunction = (a: any, b?: any, c?: any) => boolean;
+export type ConditionParams = [any, string, any?, boolean?];
+export interface OperationEntry {
+    operation: string;
+    function: OperationFunction;
+}
+export declare const operationList: OperationEntry[];
+export declare class UnsupportedOperationException extends Error {
+}
+export declare class OperationExecutionException extends Error {
+    operationName: string;
+    operands: any[];
+    constructor(operationName: string, operands: any[], message?: string);
+}
+export declare const checkCondition: (params: [any, string, any?]) => boolean;
+export declare const checkConditions: (conditions: ConditionParams[]) => boolean;
