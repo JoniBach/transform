@@ -21,4 +21,5 @@ import { metersToFeet, feetToMeters } from '@jonibach/convert';
 
 console.log(metersToFeet(1)); // Converts 1 meter to feet
 console.log(feetToMeters(3.28084)); // Converts 3.28084 feet to meters
+
 ```
