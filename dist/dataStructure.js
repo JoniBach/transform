@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.stringToArray = exports.stringToObject = exports.nestedObjectArrayToQueryString = exports.nestedObjectArrayToString = exports.nestedObjectArrayKeysToString = exports.nestedObjectArrayValuesToString = exports.objectArrayToQueryString = exports.objectArrayToString = exports.objectArrayKeysToString = exports.objectArrayValuesToString = exports.objectToQueryString = exports.objectToString = exports.objectKeysToString = exports.objectValuesToString = exports.arrayToGroup = exports.arrayToFlatArray = exports.arrayToSet = exports.setToArray = exports.objectToMap = exports.mapToObject = exports.arrayToObject = exports.objectToArray = void 0;
+exports.filterArrayByString = exports.filterArrayByStringRaw = exports.searchString = exports.arrayWithObjectAndString = exports.stringToArray = exports.stringToObject = exports.nestedObjectArrayToArrayOfString = exports.nestedObjectArrayToQueryString = exports.nestedObjectArrayToString = exports.nestedObjectArrayKeysToString = exports.nestedObjectArrayValuesToString = exports.objectArrayToArrayOfString = exports.objectArrayToQueryString = exports.objectArrayToString = exports.objectArrayKeysToString = exports.objectArrayValuesToString = exports.objectToQueryString = exports.objectToString = exports.objectKeysToString = exports.objectValuesToString = exports.arrayToGroup = exports.arrayToFlatArray = exports.arrayToSet = exports.setToArray = exports.objectToMap = exports.mapToObject = exports.arrayToObject = exports.objectToArray = void 0;
 // Converts an object to an array of [key, value] pairs.
 function objectToArray(obj) {
     return Object.entries(obj);
@@ -82,6 +82,10 @@ function objectArrayToQueryString(array) {
     return array.map(obj => new URLSearchParams(obj).toString()).join(', ');
 }
 exports.objectArrayToQueryString = objectArrayToQueryString;
+function objectArrayToArrayOfString(array) {
+    return array.map(obj => objectToString(obj));
+}
+exports.objectArrayToArrayOfString = objectArrayToArrayOfString;
 // nested object array stringification
 function nestedObjectArrayValuesToString(array) {
     const flattenedArray = arrayToFlatArray(array);
@@ -103,6 +107,23 @@ function nestedObjectArrayToQueryString(array) {
     return flattenedArray.map(obj => objectToQueryString(obj)).join(', ');
 }
 exports.nestedObjectArrayToQueryString = nestedObjectArrayToQueryString;
+function nestedObjectArrayToArrayOfString(nestedArray) {
+    const result = [];
+    const processElement = (element) => {
+        if (Array.isArray(element)) {
+            element.forEach(processElement);
+        }
+        else if (typeof element === 'object' && element !== null) {
+            result.push(objectToString(element));
+        }
+        else {
+            result.push(String(element));
+        }
+    };
+    processElement(nestedArray);
+    return result;
+}
+exports.nestedObjectArrayToArrayOfString = nestedObjectArrayToArrayOfString;
 // reverse stringification
 function stringToObject(str) {
     return Object.fromEntries(new URLSearchParams(str));
@@ -112,3 +133,30 @@ function stringToArray(str) {
     return Array.from(new URLSearchParams(str));
 }
 exports.stringToArray = stringToArray;
+// array with object and string
+function arrayWithObjectAndString(array) {
+    return array.map(obj => ({
+        original: obj,
+        objectString: objectValuesToString(obj),
+    }));
+}
+exports.arrayWithObjectAndString = arrayWithObjectAndString;
+function searchString(text, searchTerm) {
+    // Convert both text and searchTerm to the same case to make the search case-insensitive
+    const lowerCaseText = text.toLowerCase();
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return lowerCaseText.includes(lowerCaseSearchTerm);
+}
+exports.searchString = searchString;
+// Adjust the function signature to use the new TransformedObject type
+function filterArrayByStringRaw(array, searchTerm) {
+    // Utilize searchString for the filter condition
+    return array.filter(({ objectString }) => searchString(objectString, searchTerm));
+}
+exports.filterArrayByStringRaw = filterArrayByStringRaw;
+// Adjust the function signature to use the new TransformedObject type
+function filterArrayByString(array, searchTerm) {
+    // Utilize searchString for the filter condition
+    return array.filter(({ objectString }) => searchString(objectString, searchTerm)).map(({ original }) => (original));
+}
+exports.filterArrayByString = filterArrayByString;
