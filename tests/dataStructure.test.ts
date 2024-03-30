@@ -10,7 +10,7 @@ import {
     arrayToFlatArray,
     arrayToGroup,
     objectValuesToString, objectKeysToString, objectToString, objectToQueryString,
-    objectArrayValuesToString, objectArrayKeysToString, objectArrayToString, objectArrayToQueryString
+    objectArrayValuesToString, objectArrayKeysToString, objectArrayToString, objectArrayToQueryString, searchString, objectArrayToArrayOfString, nestedObjectArrayToArrayOfString, arrayWithObjectAndString, filterArrayByString, filterArrayByStringRaw
 } from '../src/dataStructure';
 
 
@@ -132,3 +132,147 @@ test('objectArrayToQueryString converts an array of objects to a combined query 
     assert.equal(objectArrayToQueryString(arr), "name=John, age=30");
 });
 
+// Test objectArrayToArrayOfString function
+test('objectArrayToArrayOfString converts an array of objects to an array of string representations', async () => {
+    const arrayOfObjects: Record<string, any>[] = [
+        { name: "John", age: "30" },
+        { name: "Jane", occupation: "Developer" }
+    ];
+    const expectedOutput = ["name:John, age:30", "name:Jane, occupation:Developer"];
+
+    const result = objectArrayToArrayOfString(arrayOfObjects);
+    assert.deepEqual(result, expectedOutput);
+});
+
+
+// Test nestedObjectArrayToArrayOfString for handling nested arrays and objects
+test('nestedObjectArrayToArrayOfString converts nested arrays of objects to an array of string representations', async () => {
+    const nestedArray = [
+        { name: "John", age: "30" },
+        [
+            { name: "Jane", occupation: "Developer" },
+            [
+                { name: "Doe", hobbies: ["reading", "gaming"] }
+            ]
+        ],
+        "Some random string",
+        [
+            42, // Testing with a number
+            true, // Testing with a boolean
+        ]
+    ];
+
+    const expectedOutput = [
+        "name:John, age:30",
+        "name:Jane, occupation:Developer",
+        "name:Doe, hobbies:reading,gaming",
+        "Some random string",
+        "42",
+        "true"
+    ];
+
+    const result = nestedObjectArrayToArrayOfString(nestedArray);
+    assert.deepEqual(result, expectedOutput);
+});
+
+test('arrayWithObjectAndString converts array of objects to array with original objects and their string representation', async () => {
+    const input = [{ name: "Dave", age: "42" }];
+    const expected = [{ original: { name: "Dave", age: "42" }, objectString: "Dave, 42" }];
+
+    const result = arrayWithObjectAndString(input);
+    assert.deepEqual(result, expected);
+});
+
+// search 
+
+
+// Test searchForPartialMatch function for case-insensitive partial match
+test('searchForPartialMatch finds a partial match regardless of case', async () => {
+    const text = "The quick brown fox jumps over the lazy dog.";
+
+    // Partial match, same case
+    assert.ok(searchString(text, "quick"));
+
+    // Partial match, different case
+    assert.ok(searchString(text, "QUICK"));
+
+    // Partial match at the beginning of the string
+    assert.ok(searchString(text, "the"));
+
+    // Partial match at the end of the string
+    assert.ok(searchString(text, "dog"));
+
+    // No match
+    assert.ok(!searchString(text, "cat"));
+
+    // Substring that is a part of a word (should match)
+    assert.ok(searchString(text, "jum"));
+});
+
+
+// Sample data
+const transformedArray = [
+    { original: { name: "Dave", age: 42 }, objectString: "Dave, 42" },
+    { original: { name: "Jane", occupation: "Developer", experience: "5 years" }, objectString: "Jane, Developer, 5 years" },
+    { original: { name: "Sam", hobby: "hiking" }, objectString: "Sam, hiking" }
+];
+
+// return original objects
+
+
+// Testing for a term present in one of the objects
+test('Filters based on a term present in the objects', async () => {
+    const result = filterArrayByString(transformedArray, "Dev");
+    assert.strictEqual(result.length, 1);
+    assert.strictEqual(result[0].occupation, "Developer");
+});
+
+// Testing case-insensitivity of the search
+test('Filters case-insensitively', async () => {
+    const result = filterArrayByString(transformedArray, "jane");
+    assert.strictEqual(result.length, 1);
+    assert.strictEqual(result[0].name, "Jane");
+});
+
+// Testing for a search term not present
+test('Correctly handles when the search term is not present', async () => {
+    const result = filterArrayByString(transformedArray, "astronaut");
+    assert.strictEqual(result.length, 0);
+});
+
+// Testing  match in values
+test('Filters based on  match in objectString values', async () => {
+    const result = filterArrayByString(transformedArray, "hiking");
+    assert.strictEqual(result.length, 1);
+    assert.strictEqual(result[0].hobby, "hiking");
+});
+
+
+// return transformed object
+
+// Testing for a term present in one of the objects
+test('Filters based on a term present in the objects', async () => {
+    const result = filterArrayByStringRaw(transformedArray, "Dev");
+    assert.strictEqual(result.length, 1);
+    assert.strictEqual(result[0].original.occupation, "Developer");
+});
+
+// Testing case-insensitivity of the search
+test('Filters case-insensitively', async () => {
+    const result = filterArrayByStringRaw(transformedArray, "jane");
+    assert.strictEqual(result.length, 1);
+    assert.strictEqual(result[0].original.name, "Jane");
+});
+
+// Testing for a search term not present
+test('Correctly handles when the search term is not present', async () => {
+    const result = filterArrayByStringRaw(transformedArray, "astronaut");
+    assert.strictEqual(result.length, 0);
+});
+
+// Testing  match in values
+test('Filters based on  match in objectString values', async () => {
+    const result = filterArrayByStringRaw(transformedArray, "hiking");
+    assert.strictEqual(result.length, 1);
+    assert.strictEqual(result[0].original.hobby, "hiking");
+});

@@ -82,6 +82,10 @@ export function objectArrayToQueryString(array: Record<string, any>[]): string {
     return array.map(obj => new URLSearchParams(obj).toString()).join(', ');
 }
 
+export function objectArrayToArrayOfString(array: Record<string, any>[]): string[] {
+    return array.map(obj => objectToString(obj));
+}
+
 // nested object array stringification
 
 export function nestedObjectArrayValuesToString<T>(array: Record<string, T>[]): string {
@@ -104,6 +108,23 @@ export function nestedObjectArrayToQueryString(array: Record<string, any>[]): st
     return flattenedArray.map(obj => objectToQueryString(obj)).join(', ');
 }
 
+export function nestedObjectArrayToArrayOfString(nestedArray: any): string[] {
+    const result: string[] = [];
+
+    const processElement = (element: any) => {
+        if (Array.isArray(element)) {
+            element.forEach(processElement);
+        } else if (typeof element === 'object' && element !== null) {
+            result.push(objectToString(element));
+        } else {
+            result.push(String(element));
+        }
+    };
+
+    processElement(nestedArray);
+    return result;
+}
+
 // reverse stringification
 
 export function stringToObject(str: string): Record<string, any> {
@@ -112,4 +133,42 @@ export function stringToObject(str: string): Record<string, any> {
 
 export function stringToArray(str: string): Array<[string, any]> {
     return Array.from(new URLSearchParams(str));
+}
+
+// array with object and string
+
+export function arrayWithObjectAndString<T>(array: Record<string, T>[]): Array<{ original: Record<string, T>; objectString: string }> {
+    return array.map(obj => ({
+        original: obj,
+        objectString: objectValuesToString(obj),
+    }));
+}
+
+
+export function searchString(text: string, searchTerm: string): boolean {
+    // Convert both text and searchTerm to the same case to make the search case-insensitive
+    const lowerCaseText = text.toLowerCase();
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+    return lowerCaseText.includes(lowerCaseSearchTerm);
+}
+
+// Define a more flexible type for the original object that allows optional properties to be undefined
+type OriginalObject = Record<string, string | number | undefined>;
+
+type TransformedObject = {
+    original: OriginalObject;
+    objectString: string;
+};
+
+// Adjust the function signature to use the new TransformedObject type
+export function filterArrayByStringRaw(array: TransformedObject[], searchTerm: string): TransformedObject[] {
+    // Utilize searchString for the filter condition
+    return array.filter(({ objectString }) => searchString(objectString, searchTerm));
+}
+
+// Adjust the function signature to use the new TransformedObject type
+export function filterArrayByString(array: TransformedObject[], searchTerm: string): OriginalObject[] {
+    // Utilize searchString for the filter condition
+    return array.filter(({ objectString }) => searchString(objectString, searchTerm)).map(({ original }) => (original));
 }
