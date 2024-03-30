@@ -408,3 +408,41 @@ export const checkConditions = (conditions: ConditionParams[]): boolean => {
     }
     return true; // All conditions met their expected results
 };
+
+export const checkObjectCondition = (obj: Record<string, any>, params: [string, string, any?]): boolean => {
+    const [key, operation, compareValue] = params;
+    const value = obj[key];
+    const operationEntry = operationList.find(entry => entry.operation === operation);
+
+    if (!operationEntry) {
+        throw new UnsupportedOperationException(`Unsupported operation '${operation}'. Please check the list of supported operations.`);
+    }
+
+    try {
+        // Assuming all operations need both value and compareValue, adjust as necessary.
+        return operationEntry.function(value, compareValue);
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new OperationExecutionException(operation, [value, compareValue], `Error executing '${operation}' with key '${key}' and value '${compareValue}': ${error.message}`);
+        } else {
+            throw new OperationExecutionException(operation, [value, compareValue], `Error executing '${operation}' with key '${key}' and value '${compareValue}'.`);
+        }
+    }
+};
+
+export const checkObjectConditions = (obj: Record<string, any>, conditions: [string, string, any?][]): boolean => {
+    for (const condition of conditions) {
+        if (!checkObjectCondition(obj, condition)) {
+            return false; // A condition did not meet the expected result
+        }
+    }
+    return true; // All conditions met their expected results
+};
+
+export function filterByObjectCondition(objects: Record<string, any>[], condition: [string, string, any?]): Record<string, any>[] {
+    return objects.filter(obj => checkObjectCondition(obj, condition));
+}
+
+export function filterByObjectConditions(objects: Record<string, any>[], conditions: [string, string, any?][]): Record<string, any>[] {
+    return objects.filter(obj => checkObjectConditions(obj, conditions));
+}

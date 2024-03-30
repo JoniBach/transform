@@ -49,7 +49,11 @@ import {
     UnsupportedOperationException,
     checkCondition,
     checkConditions,
-    ConditionParams
+    ConditionParams,
+    checkObjectCondition,
+    checkObjectConditions,
+    filterByObjectCondition,
+    filterByObjectConditions
 } from '../src/condition'; // Adjust the path as necessary
 
 import { test } from 'node:test';
@@ -305,3 +309,89 @@ test('checkCondition should throw UnsupportedOperationException for unsupported 
     assert.throws(() => checkCondition([1, 'unsupportedOperation', 2]), UnsupportedOperationException);
 });
 
+test('checkObjectCondition should correctly evaluate equality', () => {
+    assert.strictEqual(
+        checkObjectCondition({ firstName: 'sam' }, ['firstName', '=', 'sam']),
+        true,
+        'Failed to correctly evaluate equality'
+    );
+});
+
+test('checkObjectCondition should correctly evaluate existence', () => {
+    assert.strictEqual(
+        checkObjectCondition({ firstName: 'sam' }, ['firstName', 'exists']),
+        true,
+        'Failed to correctly evaluate existence'
+    );
+});
+
+test('checkObjectCondition should return false for failed equality check', () => {
+    assert.strictEqual(
+        checkObjectCondition({ firstName: 'john' }, ['firstName', '=', 'sam']),
+        false,
+        'Incorrectly evaluated equality as true'
+    );
+});
+
+test('checkObjectCondition should throw UnsupportedOperationException for unsupported operations', () => {
+    assert.throws(
+        () => checkObjectCondition({ age: 30 }, ['age', 'unsupportedOperation', 25]),
+        UnsupportedOperationException,
+        'Failed to throw UnsupportedOperationException for an unsupported operation'
+    );
+});
+
+test('checkObjectConditions should return true when all conditions pass', () => {
+    assert.strictEqual(
+        checkObjectConditions(
+            { firstName: 'sam', age: 30 },
+            [['firstName', '=', 'sam'], ['age', '=', 30]]
+        ),
+        true,
+        'Failed to return true when all conditions should pass'
+    );
+});
+
+test('checkObjectConditions should return false when any condition fails', () => {
+    assert.strictEqual(
+        checkObjectConditions(
+            { firstName: 'sam', age: 25 },
+            [['firstName', '=', 'sam'], ['age', '=', 30]]
+        ),
+        false,
+        'Failed to return false when at least one condition should fail'
+    );
+});
+
+test('checkObjectConditions should handle existence checks for missing keys', () => {
+    assert.strictEqual(
+        checkObjectConditions(
+            { firstName: 'sam' },
+            [['lastName', 'exists']]
+        ),
+        false,
+        'Failed to correctly handle existence checks for missing keys'
+    );
+});
+
+
+const sampleData = [
+    { id: 1, category: 'fruit', name: 'Apple' },
+    { id: 2, category: 'vegetable', name: 'Carrot' },
+    { id: 3, category: 'fruit', name: 'Banana' },
+    { id: 4, category: 'fruit', name: 'Cherry' }
+];
+
+test('filterByObjectCondition should filter objects based on a single condition', () => {
+    const result = filterByObjectCondition(sampleData, ['category', '=', 'fruit']);
+    assert.strictEqual(result.length, 3, 'Failed to filter objects based on the condition');
+});
+
+test('filterByObjectConditions should filter objects based on multiple conditions', () => {
+    const result = filterByObjectConditions(sampleData, [
+        ['category', '=', 'fruit'],
+        ['name', 'startsWith', 'C'] // Assuming your operationList supports 'startsWith'
+    ]);
+    assert.strictEqual(result.length, 1, 'Failed to filter objects based on multiple conditions');
+    assert.strictEqual(result[0].name, 'Cherry', 'Incorrect object filtered');
+});
