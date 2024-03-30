@@ -8,7 +8,9 @@ import {
     setToArray,
     arrayToSet,
     arrayToFlatArray,
-    arrayToGroup
+    arrayToGroup,
+    objectValuesToString, objectKeysToString, objectToString, objectToQueryString,
+    objectArrayValuesToString, objectArrayKeysToString, objectArrayToString, objectArrayToQueryString
 } from '../src/dataStructure';
 
 
@@ -80,3 +82,53 @@ test('arrayToGroup groups an array of objects by a given key', () => {
     };
     assert.deepStrictEqual(arrayToGroup(array, 'category'), expected);
 });
+
+// Test objectValuesToString
+test('objectValuesToString converts object values to a CSV string', async () => {
+    const obj = { name: "John", age: 30, occupation: "Developer" };
+    assert.equal(objectValuesToString(obj), "John, 30, Developer");
+});
+
+// Test objectKeysToString
+test('objectKeysToString converts object keys to a CSV string', async () => {
+    const obj = { name: "John", age: 30, occupation: "Developer" };
+    assert.equal(objectKeysToString(obj), "name, age, occupation");
+});
+
+// Test objectToString
+test('objectToString converts an object into a key:value CSV string', async () => {
+    const obj = { name: "John", age: 30 };
+    assert.equal(objectToString(obj), "name:John, age:30");
+});
+
+// Test objectToQueryString
+test('objectToQueryString converts an object to a query string', async () => {
+    const obj = { name: "John Doe", age: "30" };
+    assert.equal(objectToQueryString(obj), "name=John+Doe&age=30");
+});
+
+// Test objectArrayValuesToString
+test('objectArrayValuesToString converts an array of objects\' values to a CSV string', async () => {
+    const arr: Record<string, string>[] = [{ name: "John" }, { age: "30" }];
+    assert.equal(objectArrayValuesToString(arr), "John, 30");
+});
+
+// Test objectArrayKeysToString
+test('objectArrayKeysToString converts an array of objects\' keys to a CSV string', async () => {
+    const arr: Record<string, string>[] = [{ name: "John" }, { age: "30" }];
+    assert.equal(objectArrayKeysToString(arr), "name, age");
+});
+
+// Test objectArrayToString
+test('objectArrayToString converts an array of objects to a CSV string of key:value pairs', async () => {
+    const arr = [{ name: "John", age: "30" }];
+    assert.equal(objectArrayToString(arr), "name:John, age:30");
+});
+
+// Test objectArrayToQueryString
+test('objectArrayToQueryString converts an array of objects to a combined query string', async () => {
+    const arr = [{ name: "John" }, { age: 30 }];
+    // Assuming each object is treated as a separate query string parameter set, concatenated by ','
+    assert.equal(objectArrayToQueryString(arr), "name=John, age=30");
+});
+
