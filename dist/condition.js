@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OperationExecutionException = exports.UnsupportedOperationException = exports.operationList = exports.noneMatch = exports.anyMatch = exports.allMatch = exports.nor = exports.nand = exports.xor = exports.extensionMatches = exports.fileExists = exports.domainMatches = exports.validEmail = exports.validURL = exports.valueForKey = exports.keyDoesNotExist = exports.keyExists = exports.sameDay = exports.betweenDates = exports.after = exports.before = exports.lengthLessThan = exports.lengthGreaterThan = exports.lengthEquals = exports.regex = exports.divisibleBy = exports.odd = exports.even = exports.not = exports.or = exports.and = exports.notEmpty = exports.empty = exports.notInArray = exports.inArray = exports.matches = exports.contains = exports.endsWith = exports.startsWith = exports.checkType = exports.doesNotExist = exports.exists = exports.isStrictlyNotEqualTo = exports.isStrictlyEqualTo = exports.isLessThanOrEqualTo = exports.isGreaterThanOrEqualTo = exports.isLessThan = exports.isGreaterThan = exports.isNotEqualTo = exports.isEqualTo = void 0;
-exports.checkConditions = exports.checkCondition = void 0;
+exports.filterByObjectConditions = exports.filterByObjectCondition = exports.checkObjectConditions = exports.checkObjectCondition = exports.checkConditions = exports.checkCondition = void 0;
 function isEqualTo(a, b) {
     return a == b;
 }
@@ -444,3 +444,41 @@ const checkConditions = (conditions) => {
     return true; // All conditions met their expected results
 };
 exports.checkConditions = checkConditions;
+const checkObjectCondition = (obj, params) => {
+    const [key, operation, compareValue] = params;
+    const value = obj[key];
+    const operationEntry = exports.operationList.find(entry => entry.operation === operation);
+    if (!operationEntry) {
+        throw new UnsupportedOperationException(`Unsupported operation '${operation}'. Please check the list of supported operations.`);
+    }
+    try {
+        // Assuming all operations need both value and compareValue, adjust as necessary.
+        return operationEntry.function(value, compareValue);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            throw new OperationExecutionException(operation, [value, compareValue], `Error executing '${operation}' with key '${key}' and value '${compareValue}': ${error.message}`);
+        }
+        else {
+            throw new OperationExecutionException(operation, [value, compareValue], `Error executing '${operation}' with key '${key}' and value '${compareValue}'.`);
+        }
+    }
+};
+exports.checkObjectCondition = checkObjectCondition;
+const checkObjectConditions = (obj, conditions) => {
+    for (const condition of conditions) {
+        if (!(0, exports.checkObjectCondition)(obj, condition)) {
+            return false; // A condition did not meet the expected result
+        }
+    }
+    return true; // All conditions met their expected results
+};
+exports.checkObjectConditions = checkObjectConditions;
+function filterByObjectCondition(objects, condition) {
+    return objects.filter(obj => (0, exports.checkObjectCondition)(obj, condition));
+}
+exports.filterByObjectCondition = filterByObjectCondition;
+function filterByObjectConditions(objects, conditions) {
+    return objects.filter(obj => (0, exports.checkObjectConditions)(obj, conditions));
+}
+exports.filterByObjectConditions = filterByObjectConditions;
