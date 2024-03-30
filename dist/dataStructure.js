@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.arrayToGroup = exports.arrayToFlatArray = exports.arrayToSet = exports.setToArray = exports.objectToMap = exports.mapToObject = exports.arrayToObject = exports.objectToArray = void 0;
+exports.stringToArray = exports.stringToObject = exports.nestedObjectArrayToQueryString = exports.nestedObjectArrayToString = exports.nestedObjectArrayKeysToString = exports.nestedObjectArrayValuesToString = exports.objectArrayToQueryString = exports.objectArrayToString = exports.objectArrayKeysToString = exports.objectArrayValuesToString = exports.objectToQueryString = exports.objectToString = exports.objectKeysToString = exports.objectValuesToString = exports.arrayToGroup = exports.arrayToFlatArray = exports.arrayToSet = exports.setToArray = exports.objectToMap = exports.mapToObject = exports.arrayToObject = exports.objectToArray = void 0;
 // Converts an object to an array of [key, value] pairs.
 function objectToArray(obj) {
     return Object.entries(obj);
@@ -44,3 +44,71 @@ function arrayToGroup(array, key) {
     }, {});
 }
 exports.arrayToGroup = arrayToGroup;
+// Converts an object's values to a single comma-separated string.
+function objectValuesToString(obj) {
+    return Object.values(obj).join(', ');
+}
+exports.objectValuesToString = objectValuesToString;
+// Converts an object's keys to a single comma-separated string.
+function objectKeysToString(obj) {
+    return Object.keys(obj).join(', ');
+}
+exports.objectKeysToString = objectKeysToString;
+// Converts an object into a string by concatenating its key-value pairs, each pair in "key:value" format.
+function objectToString(obj) {
+    const keyValuePairs = Object.entries(obj).map(([key, value]) => `${key}:${value}`);
+    return keyValuePairs.join(', ');
+}
+exports.objectToString = objectToString;
+// Converts an object to a query string.
+function objectToQueryString(obj) {
+    return new URLSearchParams(obj).toString();
+}
+exports.objectToQueryString = objectToQueryString;
+// non nested object array stringification
+function objectArrayValuesToString(array) {
+    return array.map(obj => Object.values(obj).join(', ')).join(', ');
+}
+exports.objectArrayValuesToString = objectArrayValuesToString;
+function objectArrayKeysToString(array) {
+    return array.map(obj => Object.keys(obj).join(', ')).join(', ');
+}
+exports.objectArrayKeysToString = objectArrayKeysToString;
+function objectArrayToString(array) {
+    return array.map(obj => Object.entries(obj).map(([key, value]) => `${key}:${value}`).join(', ')).join(', ');
+}
+exports.objectArrayToString = objectArrayToString;
+function objectArrayToQueryString(array) {
+    return array.map(obj => new URLSearchParams(obj).toString()).join(', ');
+}
+exports.objectArrayToQueryString = objectArrayToQueryString;
+// nested object array stringification
+function nestedObjectArrayValuesToString(array) {
+    const flattenedArray = arrayToFlatArray(array);
+    return flattenedArray.map(obj => objectValuesToString(obj)).join(', ');
+}
+exports.nestedObjectArrayValuesToString = nestedObjectArrayValuesToString;
+function nestedObjectArrayKeysToString(array) {
+    const flattenedArray = arrayToFlatArray(array);
+    return flattenedArray.map(obj => objectKeysToString(obj)).join(', ');
+}
+exports.nestedObjectArrayKeysToString = nestedObjectArrayKeysToString;
+function nestedObjectArrayToString(array) {
+    const flattenedArray = arrayToFlatArray(array);
+    return flattenedArray.map(obj => objectToString(obj)).join(', ');
+}
+exports.nestedObjectArrayToString = nestedObjectArrayToString;
+function nestedObjectArrayToQueryString(array) {
+    const flattenedArray = arrayToFlatArray(array);
+    return flattenedArray.map(obj => objectToQueryString(obj)).join(', ');
+}
+exports.nestedObjectArrayToQueryString = nestedObjectArrayToQueryString;
+// reverse stringification
+function stringToObject(str) {
+    return Object.fromEntries(new URLSearchParams(str));
+}
+exports.stringToObject = stringToObject;
+function stringToArray(str) {
+    return Array.from(new URLSearchParams(str));
+}
+exports.stringToArray = stringToArray;
