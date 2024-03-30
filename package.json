@@ -6,6 +6,7 @@
   "types": "@types/index.d.ts",
   "scripts": {
     "test": "glob -c \"node -r ts-node/register --no-warnings --test\" \"./tests/**/*.test.ts\"",
+    "coverage": "nyc npm run test",
     "build": "tsc",
     "build:test": "node test-and-build.js",
     "release": "npm publish --access public"
@@ -27,6 +28,7 @@
     "assert": "^2.1.0",
     "js-yaml": "^4.1.0",
     "marked": "^12.0.1",
+    "nyc": "^15.1.0",
     "pako": "^2.1.0",
     "papaparse": "^5.4.1",
     "ts-node": "^10.9.2",
