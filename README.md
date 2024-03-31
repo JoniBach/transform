@@ -10,14 +10,19 @@ Convert is a JavaScript library that provides conversion utilities for various d
 Check out the [official demo](https://jonibach.github.io/convert-demo/) for detailed usage instructions and examples.
 
 ## Installation
+
 To install the package, run:
+
 ```bash
 npm install @jonibach/convert
 ```
+
 ## Usage
+
 Here's how you can use the package:
+
 ```javascript
-import { metersToFeet, feetToMeters } from '@jonibach/convert';
+import { metersToFeet, feetToMeters } from "@jonibach/convert";
 
 console.log(metersToFeet(1)); // Converts 1 meter to feet
 console.log(feetToMeters(3.28084)); // Converts 3.28084 feet to meters
