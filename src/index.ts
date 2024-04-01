@@ -7,3 +7,5 @@ export * from "./logic";
 export * from "./misc";
 export * from "./number";
 export * from "./string";
+export * from "./dataStructure";
+
