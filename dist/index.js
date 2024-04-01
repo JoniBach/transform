@@ -24,3 +24,4 @@ __exportStar(require("./misc"), exports);
 __exportStar(require("./number"), exports);
 __exportStar(require("./string"), exports);
 __exportStar(require("./dataStructure"), exports);
+__exportStar(require("./operations"), exports);

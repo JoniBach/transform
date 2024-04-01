@@ -8,5 +8,4 @@ export * from "./misc";
 export * from "./number";
 export * from "./string";
 export * from "./dataStructure";
-
 export * from "./operations"
