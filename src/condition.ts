@@ -1,4 +1,4 @@
-import { operationList } from "./operations";
+import { operationList } from "@jonibach/check";
 
 export type OperationFunction = (a: any, b?: any, c?: any) => boolean;
 export type ConditionParams = [any, string, any?, boolean?];
@@ -8,7 +8,7 @@ export interface OperationEntry {
   function: OperationFunction;
 }
 
-export class UnsupportedOperationException extends Error {}
+export class UnsupportedOperationException extends Error { }
 export class OperationExecutionException extends Error {
   constructor(
     public operationName: string,

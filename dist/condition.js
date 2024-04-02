@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.filterByObjectConditions = exports.filterByObjectCondition = exports.checkObjectConditions = exports.checkObjectCondition = exports.checkConditions = exports.checkCondition = exports.OperationExecutionException = exports.UnsupportedOperationException = void 0;
-const operations_1 = require("./operations");
+const check_1 = require("@jonibach/check");
 class UnsupportedOperationException extends Error {
 }
 exports.UnsupportedOperationException = UnsupportedOperationException;
@@ -16,7 +16,7 @@ class OperationExecutionException extends Error {
 exports.OperationExecutionException = OperationExecutionException;
 const checkCondition = (params) => {
     const [value1, operation, value2] = params;
-    const operationEntry = operations_1.operationList.find((entry) => entry.operation === operation);
+    const operationEntry = check_1.operationList.find((entry) => entry.operation === operation);
     if (!operationEntry) {
         throw new UnsupportedOperationException(`Unsupported operation '${operation}'. Please check the list of supported operations.`);
     }
@@ -51,7 +51,7 @@ exports.checkConditions = checkConditions;
 const checkObjectCondition = (obj, params) => {
     const [key, operation, compareValue] = params;
     const value = obj[key];
-    const operationEntry = operations_1.operationList.find((entry) => entry.operation === operation);
+    const operationEntry = check_1.operationList.find((entry) => entry.operation === operation);
     if (!operationEntry) {
         throw new UnsupportedOperationException(`Unsupported operation '${operation}'. Please check the list of supported operations.`);
     }
